@@ -1,1 +1,1 @@
-html{box-sizing:border-box}*,*::before,*::after{box-sizing:inherit}.start{display:block}
+.start{display:block}.start .main{padding:0}.start .main .inner{margin:0}

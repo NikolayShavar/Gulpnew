@@ -1,0 +1,9 @@
+.start {
+  display: block;
+}
+.start .main {
+  padding: 0;
+}
+.start .main .inner {
+  margin: 0;
+}

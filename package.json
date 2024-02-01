@@ -25,5 +25,8 @@
     "gulp-uglify-es": "^3.0.0",
     "gulp-webp": "^4.0.1",
     "sass": "^1.70.0"
+  },
+  "dependencies": {
+    "gulp-rename": "^2.0.0"
   }
 }
