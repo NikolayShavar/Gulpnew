@@ -102,7 +102,7 @@ function scripts() {            //обработчик js
 
 
 function styles () {            //обработчик Стилей
-  return src(['src/sass/style.sass', 'src/blocks/**/*.sass'])
+  return src('src/sass/style.sass')
   .pipe(sass())
   .pipe(autoprefixer({ overrideBrowserslist: ['last 10 version']}))
   .pipe(dest('src/css'))
@@ -126,7 +126,7 @@ function resetstyle () {
 
 
 function html () {            //перекидывает все html из src в app 
-  return src('src/**/*.html')
+  return src(['src/pages/*.html','src/*.html'])
   .pipe(dest('app/'))
 }
 
@@ -149,4 +149,4 @@ exports.pughtml = pughtml;
 exports.resetstyle = resetstyle;
 
 exports.clean = series(cleanapp, html, styles, resetstyle, scripts)
-exports.default = parallel(pughtml, html ,styles,resetstyle, scripts, images,pages, watching);
+exports.default = parallel(pughtml, html ,styles, resetstyle, scripts, images,pages, watching);
