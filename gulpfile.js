@@ -14,6 +14,13 @@ const fonter = require('gulp-fonter');
 const ttf2woff2 = require('gulp-ttf2woff2');
 const svgSprite = require('gulp-svg-sprite');
 const include = require('gulp-include');
+const pug = require('gulp-pug');
+
+function pughtml() {
+  return src('src/**/*.pug')
+  .pipe(pug())
+  .pipe(dest('src/'))
+}
 
 function pages() {
   return src('src/pages/*.html')
@@ -34,12 +41,7 @@ function fonts () {
   .pipe(src('src/fonts/*.ttf'))
   .pipe(ttf2woff2())
 
-
-
  .pipe(dest('app/fonts'))
-
- 
-
 }
 
 
@@ -73,8 +75,6 @@ function images() {     // уменьшатель картинок кроме sv
   .pipe(newer('app/images'))
   .pipe(imagemin())
 
-
-
    .pipe(dest('app/images'))
 }
 
@@ -93,7 +93,7 @@ function watching() {            //СЛЕДИЛКА и Живой сервер
 }
 
 function scripts() {            //обработчик js
-  return src('src/js/main.js')
+  return src(['src/js/main.js', 'src/blocks/**/*.js'])
     .pipe(concat('main.min.js'))
     .pipe(uglify())
     .pipe(dest('app/js'))
@@ -102,7 +102,7 @@ function scripts() {            //обработчик js
 
 
 function styles () {            //обработчик Стилей
-  return src('src/sass/style.sass')
+  return src(['src/sass/style.sass', 'src/blocks/**/*.sass'])
   .pipe(sass())
   .pipe(autoprefixer({ overrideBrowserslist: ['last 10 version']}))
   .pipe(dest('src/css'))
@@ -111,6 +111,17 @@ function styles () {            //обработчик Стилей
   .pipe(dest('app/css'))
   .pipe(browserSync.stream())
 }
+
+
+
+function resetstyle () {
+  return src ('src/css/reset.css')
+  .pipe(autoprefixer({ overrideBrowserslist: ['last 10 version']}))
+  .pipe(sass({outputStyle: 'compressed' }))
+  .pipe(rename('reset.min.css'))
+  .pipe(dest('app/css'))
+  .pipe(browserSync.stream())
+} 
 
 
 
@@ -124,14 +135,7 @@ function cleanapp() {
   .pipe(clean())
 }
 
-// function build() {
-//   return src ([
-//     'app/css/style.min.css',
-//     'app/js/main.min.js',
-//     'app/**/*.html'
-//   ], {base : 'app'})
-//   .pipe(dest('dist'))
-// }
+
 
 exports.html = html;
 exports.styles = styles;
@@ -141,7 +145,8 @@ exports.images = images;
 exports.sprite = sprite;
 exports.fonts = fonts;
 exports.pages = pages;
+exports.pughtml = pughtml;
+exports.resetstyle = resetstyle;
 
-
-exports.clean = series(cleanapp, html, styles, scripts)
-exports.default = parallel(html ,styles, scripts, images,pages, watching);
+exports.clean = series(cleanapp, html, styles, resetstyle, scripts)
+exports.default = parallel(pughtml, html ,styles,resetstyle, scripts, images,pages, watching);
